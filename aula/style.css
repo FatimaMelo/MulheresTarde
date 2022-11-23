@@ -1,0 +1,31 @@
+.imagens img{
+    width:100%;
+    height:300px;
+}
+
+.conteudo{
+    padding:20px;
+}
+
+.conteudo img{
+    width:100%;
+    height:350px;
+}
+
+.texto{
+    padding:20px;
+}
+
+.mapa iframe{
+    width:auto;
+    height: 15rem;
+}
+
+.sociais img{
+    width:50px;
+    height:50px;
+}
+
+.sociais{
+    padding:20px;
+}
