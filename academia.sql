@@ -14,7 +14,7 @@ create table endereco(
 	uf char(2)not null);
 	
 create table aluno(
-	matricula integer primary key,
+	matricula integer primary key auto_increment,
 	nome varchar(60)not null,
 	telefone varchar(15)not null,
 	cpf char(14)not null,
@@ -38,7 +38,7 @@ create table funcionario(
 	foreign key(cep)references endereco(cep));
 	
 create table professor(
-	idprofessor integer primary key,
+	idprofessor integer primary key auto_increment,
 	disponibilidade varchar(40)not null,
 	cpffuncionario char(14)not null,
 	foreign key(cpffuncionario)references funcionario(cpffuncionario));
@@ -90,8 +90,13 @@ create table venda(
 	foreign key(cpffuncionario)references funcionario(cpffuncionario));
 	
 
-	
+insert into endereco(cep,rua,bairro,cidade,uf)VALUES
+('23085-610','Rua Padre Pauwels','Campo Grande','Rio de Janeiro','RJ'),
+('26551-090','Travessa Elpidio','Cruzeiro do Sul','Mesquita','RJ');
 
+
+insert into aluno(nome,telefone,rg,cpf,datanascimento,cep,numerocasa,complemento,foto)VALUES
+('maria','(21)99886-1055','12555','123456893-10','2001-08-01','23085-610',31,'ap 102','vazio');
 	
 
 
