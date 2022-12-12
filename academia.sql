@@ -141,6 +141,76 @@ insert into venda(data,valor,quantidade,codigoproduto,cpffuncionario)VALUES
 ('2022-12-05',120,1,2,'789');
 
 
+PESQUISAS NAS TABELAS
 
+1) Pesquisar todas as colunas com todos os registros.
 
+select * from aluno;
+
+2) Pesquisar nome e telefone de todos os alunos.
+
+select nome,telefone from aluno;
+
+3) Pesquisar nome e telefone dos alunos que moram em apartamentos.
+
+select nome,telefone from aluno 
+where
+complemento like '%ap%'; 
+
+4) Pesquisar nome e preço de todos os produtos com estoque maior ou igual a
+ 30 unidades.
+ 
+ select nome,valor from produto where quantidade >= 30;
+
+5) Pesquisar qual a soma do valor dos produtos em estoque.(soma dos valores).
+
+select sum(valor) from produto;
+
+6)Verificar qual o valor total de mercadorias em estoque.
+
+select sum(valor*quantidade) from produto;
+
+/*Nomeando pesquisas / colunas */
+
+select sum(valor*quantidade) as 'Total do Estoque' from produto;
+
+7) Pesquisar as informações das aulas executadas entre os dias
+06/12/2022 a 10/12/2022.
+
+select * from aula WHERE
+dataaula >= '2022-12-06' AND
+dataaula <= '2022-12-10';
+
+select * from aula WHERE
+dataaula BETWEEN '2022-12-06' and '2022-12-10';
+
+8)Pesquisar as informações das aulas executadas nos dias 
+06/12/2022 e 10/12/2022.
+
+select * from aula where
+dataaula in ('2022-12-06','2022-12-10');
+
+9)Pesquisar o nome, telefone e cpf  de todas as alunas que o nome comece com a letra m.
+
+select nome,telefone,cpf from aluno
+WHERE
+nome like 'm%';
+
+10)Alterar a tabela de alunos para inserir o sobrenome nos alunos
+de matrícula 1 e 2.
+
+update aluno
+set nome = 'Maria Silva dos Santos'
+where matricula = 1;
+
+update aluno
+set nome = 'Pedro Melo de Souza'
+where matricula = 2;
+
+11)Pesquisar o nome e telefone dos alunos que o último sobrenome é
+Souza.
+
+select nome,telefone from aluno
+where 
+nome like '%Souza';
 
