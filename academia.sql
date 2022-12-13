@@ -214,3 +214,70 @@ select nome,telefone from aluno
 where 
 nome like '%Souza';
 
+12) Pesquisar a média de preço dos produtos no estoque.
+
+select avg(valor) from produto;
+
+13) Pesquisar o produto com menor preço em estoque.
+
+select min(valor) from produto;
+
+14) Pesquisar o produto com maior valor em estoque.
+
+select max(valor) from produto;
+
+15)Pesquisar nome do aluno, telefone, rua,numero da casa e bairro.
+select aluno.nome, aluno.telefone,endereco.rua,aluno.numerocasa,endereco.bairro
+from aluno inner join endereco
+on endereco.cep = aluno.cep;
+
+/*Dando um apelido a tabela*/
+select a.nome, a.telefone,e.rua,a.numerocasa,e.bairro
+from aluno a inner join endereco e
+on e.cep = a.cep;
+
+16)Pesquisar nome da atividade, data da aula e horário de todas as aulas do
+mês de dezembro 2022.
+
+select ati.nomeatividade,a.dataaula,a.horario
+from atividade ati  inner join aula a
+on ati.idatividade = a.idatividade
+and a.dataaula between '2022-12-01' and '2022-12-31';
+
+17) Pesquisar nome e telefone de todos os professores.
+select f.nome, f.telefone 
+from funcionario f inner join professor p
+on f.cpffuncionario = p.cpffuncionario; 
+
+18) Pesquisar o nome do funcionário e valor das vendas que realizou no mês de dezembro.
+
+select f.nome,v.valor 
+from funcionario f inner join venda v
+on f.cpffuncionario = v.cpffuncionario;
+
+
+17) Pesquisar nome e telefone de todos os professores.
+
+select f.nome,f.telefone
+from funcionario f inner join professor p
+on f.cpffuncionario = p.cpffuncionario;
+
+
+18) Pesquisar o nome do funcionário e valor das vendas que realizou no mês de dezembro.
+
+select f.nome,v.valor
+from funcionario f inner join venda v
+on f.cpffuncionario = v.cpffuncionario
+and v.data between '2022-12-01' and '2022-12-31';
+
+
+19)Pesquisar nome da atividade, nome dos alunos, data da aula e horário de todas as aulas do mês de dezembro 2022.
+
+select ati.nomeatividade,a.dataaula,a.horario,alu.nome
+from atividade ati  inner join aula a
+on ati.idatividade = a.idatividade
+inner join aulaaluno aa
+on a.idaula = aa.idaula 
+inner join aluno alu
+on alu.matricula = aa.matricula
+and a.dataaula between '2022-12-01' and '2022-12-31';
