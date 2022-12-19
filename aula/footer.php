@@ -1,3 +1,4 @@
+<footer class="">
 <div class="container-fluid">
       <div class="row text-center bg-light">
         <div class="col-md-3">
@@ -38,7 +39,7 @@
         </div>
       </div>
     </div>
-
+  </footer>
 
      <!-- JavaScript (Opcional) -->
     <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->

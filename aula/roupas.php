@@ -24,6 +24,7 @@
                      <div class="card-body">
                         <h3 class="card-text">Conjunto Mayra</h3>
                         <p class="card-text">R$ 50,00</p>
+                        
                     </div>
                 </div>
             </div>
