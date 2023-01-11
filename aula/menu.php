@@ -52,6 +52,8 @@
 
 
     <!-- Modal -->
+
+    
 <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -79,7 +81,7 @@
                                 <input type="text" name="password" id="password" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="remember-me" class="text-info"><span>Lembrar</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
+                               
                                 <input type="submit" name="submit" class="btn btn-info btn-md" value="Enviar">
                                 <input type="submit" name="submit" class="btn btn-info btn-md" value="Cadastre-se">
                             </div>
