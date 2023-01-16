@@ -1,348 +1,439 @@
-
-
-drop database if exists academia1; 
-
-create database academia1 character set utf8 COLLATE utf8_general_ci;
-
-use academia1;
-
-create table endereco(
-	cep char(9) primary key,
-	rua varchar(60)not null,
-	bairro varchar(40)not null,
-	cidade varchar(40)not null,
-	uf char(2)not null);
-	
-create table aluno(
-	matricula integer primary key auto_increment,
-	nome varchar(60)not null,
-	telefone varchar(15)not null,
-	sexo char(1)not null,
-	cpf char(14)not null,
-	rg varchar(15)not null,
-	datanascimento date not null,
-	cep char(9) not null,
-	numerocasa smallint not null,
-	complemento varchar(30), 
-	foto varchar(255),
-	foreign key(cep)references endereco(cep));
-	
-create table funcionario(
-	cpffuncionario char(14)primary key,
-	nome varchar(60)not null,
-	telefone varchar(15)not null,
-	sexo char(1)not null,
-	rg varchar(15)not null,
-	cep char(9) not null,
-	numerocasa smallint not null,
-	complemento varchar(30), 
-	foto varchar(255),
-	foreign key(cep)references endereco(cep));
-	
-create table professor(
-	idprofessor integer primary key auto_increment,
-	disponibilidade varchar(40)not null,
-	cpffuncionario char(14)not null,
-	foreign key(cpffuncionario)references funcionario(cpffuncionario));
-
-
-create table atividade(
-	idatividade integer primary key auto_increment,
-		nomeatividade varchar(60)not null,
-		descricao varchar(100)not null);	
-
-
-		
-create table habilitaprofessor(
-	idhabilitacao integer primary key auto_increment,
-	idatividade integer not null,
-	idprofessor integer not null,
-	foreign key(idatividade)references atividade(idatividade),
-	foreign key(idprofessor)references professor(idprofessor));	
-	
-
-create table aula(
-	idaula integer primary key auto_increment,
-	dataaula date not null,
-	horario varchar(30)not null,
-	idprofessor integer not null,
-	idatividade integer not null,
-	foreign key(idprofessor)references professor(idprofessor),
-	foreign key(idatividade)references atividade(idatividade));	
-
-
-create table aulaaluno(
-	idaulaaluno integer primary key auto_increment,
-	matricula integer not null,
-	idaula integer not null,
-	foreign key(matricula)references aluno(matricula),
-	foreign key(idaula)references aula(idaula));
-	
-	
-create table produto(
-	codigoproduto integer primary key auto_increment,
-	nome varchar(60)not null,
-	cor varchar(30)not null,
-	valor double not null,
-	tamanho char(2)not null,
-	quantidade integer not null);
-	
-
-	
-create table venda(
-	idvenda integer primary key auto_increment,
-	data date not null,
-	valor double not null,
-	quantidade integer not null,
-	codigoproduto integer not null,
-	cpffuncionario char(14)not null,
-	foreign key(codigoproduto)references produto(codigoproduto),
-	foreign key(cpffuncionario)references funcionario(cpffuncionario));
-	
-	
-
-insert into endereco(cep,rua,bairro,cidade,uf)VALUES
-('23085-610','Rua Padre Pauwels','Campo Grande','Rio de Janeiro','RJ'),
-('26551-090','Travessa Elpidio','Cruzeiro do Sul','Mesquita','RJ');
-
-
-insert into aluno(nome,telefone,rg,cpf,datanascimento,cep,numerocasa,complemento,foto,sexo)VALUES
-('Maria','(21)99886-1055','12555','123456893-10','2001-08-01','23085-610',31,'ap 102','vazio','F'),
-('Pedro','(21)99999-1055','00012','123456789-10','1997-10-20','26551-090',100,'fundos','vazio','M');
-	
-insert into funcionario(cpffuncionario,nome,telefone,rg,cep,numerocasa,complemento,foto,sexo)VALUES
-('123','Mário Silva','(21)9999-8888','0001','23085-610',40,'ap 202','vazio','M'),
-('456','Gabriel Silva','(21)9999-7777','0002','26551-090',100,'casa','vazio','M'),
-('789','Mariana Souza','(21)9999-5555','1234','23085-610',1820,'casa','vazio','F');
-
-insert into professor(disponibilidade,cpffuncionario)VALUES
-('segunda e sexta dia todo','123'),
-('terca,quarta e quinta dia todo','456');
-
-insert into atividade(nomeatividade,descricao)VALUES
-('jumpp','atividade realizada pulando em um trampolim'),
-('spinning','atividade realizada em uma bicicleta com subidas');
-
-insert into habilitaprofessor(idatividade,idprofessor)VALUES
-(1,1),(2,1),(2,2);
-
-insert into aula(dataaula,horario,idprofessor,idatividade)VALUES
-('2022-12-05','de 15:00 às 15:30h',1,1),
-('2022-12-09','de 08:00 às 9:00h',1,2),
-('2022-12-06','de 07:00 às 08:00h',2,2);
-
-insert into aulaaluno(matricula,idaula)VALUES
-(1,1),(1,2),(2,3);
-
-insert into produto(nome,cor,valor,tamanho,quantidade)VALUES
-('mochila Paloma','rosa',150,'un',20),
-('mochila Raissa','azul',120,'un',30);
-
-insert into venda(data,valor,quantidade,codigoproduto,cpffuncionario)VALUES
-('2022-12-05',300,2,1,'789'),
-('2022-12-05',120,1,2,'789');
-
-
-PESQUISAS NAS TABELAS
-
-1) Pesquisar todas as colunas com todos os registros.
-
-select * from aluno;
-
-2) Pesquisar nome e telefone de todos os alunos.
-
-select nome,telefone from aluno;
-
-3) Pesquisar nome e telefone dos alunos que moram em apartamentos.
-
-select nome,telefone from aluno 
-where
-complemento like '%ap%'; 
-
-4) Pesquisar nome e preço de todos os produtos com estoque maior ou igual a
- 30 unidades.
- 
- select nome,valor from produto where quantidade >= 30;
-
-5) Pesquisar qual a soma do valor dos produtos em estoque.(soma dos valores).
-
-select sum(valor) from produto;
-
-6)Verificar qual o valor total de mercadorias em estoque.
-
-select sum(valor*quantidade) from produto;
-
-/*Nomeando pesquisas / colunas */
-
-select sum(valor*quantidade) as 'Total do Estoque' from produto;
-
-7) Pesquisar as informações das aulas executadas entre os dias
-06/12/2022 a 10/12/2022.
-
-select * from aula WHERE
-dataaula >= '2022-12-06' AND
-dataaula <= '2022-12-10';
-
-select * from aula WHERE
-dataaula BETWEEN '2022-12-06' and '2022-12-10';
-
-8)Pesquisar as informações das aulas executadas nos dias 
-06/12/2022 e 10/12/2022.
-
-select * from aula where
-dataaula in ('2022-12-06','2022-12-10');
-
-9)Pesquisar o nome, telefone e cpf  de todas as alunos que o nome comece com a letra m.
-
-select nome,telefone,cpf from aluno
-WHERE
-nome like 'm%';
-
-10)Alterar a tabela de alunos para inserir o sobrenome nos alunos
-de matrícula 1 e 2.
-
-update aluno
-set nome = 'Maria Silva dos Santos'
-where matricula = 1;
-
-update aluno
-set nome = 'Pedro Melo de Souza'
-where matricula = 2;
-
-11)Pesquisar o nome e telefone dos alunos que o último sobrenome é
-Souza.
-
-select nome,telefone from aluno
-where 
-nome like '%Souza';
-
-/*Para acrescentar mais um critério colocar AND ou OR */
-
-select nome,telefone from aluno
-where 
-nome like '%Souza' or nome like '%Silva';
-
-
-12) Pesquisar a média de preço dos produtos no estoque.
-
-select avg(valor) from produto;
-
-13) Pesquisar o produto com menor preço em estoque.
-
-select min(valor) from produto;
-
-14) Pesquisar o produto com maior valor em estoque.
-
-select max(valor) from produto;
-
-15)Pesquisar nome do aluno, telefone, rua,numero da casa e bairro.
-
-select aluno.nome, aluno.telefone,endereco.rua,aluno.numerocasa,endereco.bairro
-from aluno inner join endereco
-on endereco.cep = aluno.cep;
-
-/*Dando um apelido a tabela*/
-select a.nome, a.telefone,e.rua,a.numerocasa,e.bairro
-from aluno a inner join endereco e
-on e.cep = a.cep;
-
-16)Pesquisar nome da atividade, data da aula e horário de todas as aulas do mês de dezembro 2022.
-
-select ati.nomeatividade,a.dataaula,a.horario
-from atividade ati  inner join aula a
-on ati.idatividade = a.idatividade
-and a.dataaula between '2022-12-01' and '2022-12-31';
-
-17) Pesquisar nome e telefone de todos os professores.
-
-select f.nome, f.telefone 
-from funcionario f inner join professor p
-on f.cpffuncionario = p.cpffuncionario; 
-
-18) Pesquisar o nome do funcionário e valor das vendas que realizou no mês de dezembro.
-
-select f.nome,v.valor 
-from funcionario f inner join venda v
-on f.cpffuncionario = v.cpffuncionario;
-
-
-17) Pesquisar nome e telefone de todos os professores.
-
-select f.nome,f.telefone
-from funcionario f inner join professor p
-on f.cpffuncionario = p.cpffuncionario;
-
-
-18) Pesquisar o nome do funcionário e valor das vendas que realizou no mês de dezembro.
-
-select f.nome,v.valor
-from funcionario f inner join venda v
-on f.cpffuncionario = v.cpffuncionario
-and v.data between '2022-12-01' and '2022-12-31';
-
-
-19)Pesquisar nome da atividade, nome dos alunos, data da aula e horário de todas as aulas do mês de dezembro 2022.
-
-select ati.nomeatividade,a.dataaula,a.horario,alu.nome
-from atividade ati  inner join aula a
-on ati.idatividade = a.idatividade
-inner join aulaaluno aa
-on a.idaula = aa.idaula 
-inner join aluno alu
-on alu.matricula = aa.matricula
-and a.dataaula between '2022-12-01' and '2022-12-31';
-
-20)Pesquisar nome e telefone de todos os personal que tiveram aula no dia 09/12/2022.
-
-select f.nome,f.telefone
-from funcionario f inner join professor p 
-on f.cpffuncionario = p.cpffuncionario
-inner join aula a 
-on p.idprofessor = a.idprofessor
-and a.dataaula = '2022-12-09';
-
-
-21)Pesquisar nome e telefone de todos os professores que podem dar aulas de spinning.
-
-select f.nome,f.telefone
-from funcionario f inner join professor p 
-on f.cpffuncionario = p.cpffuncionario
-inner join habilitaprofessor hp
-on p.idprofessor = hp.idprofessor
-inner join atividade a
-on hp.idatividade = a.idatividade
-and a.nomeatividade = 'spinning';
-
-
-22)Mostrar o total de vendas do dia 05/12/2022.
-
-select sum(valor*quantidade) from venda 
-where data = '2022-12-05';
-
-
-
-
-
-
-
-
-
-
-23)Pesquisar nome da atividade, data da aula e horário de todas as aulas do dia 06/12/2022.
-
-select ati.nomeatividade,a.dataaula,a.horario
-from atividade ati  inner join aula a
-on ati.idatividade = a.idatividade
-and a.dataaula = '2022-12-06';
-
-select ati.nomeatividade,a.dataaula,a.horario
-from atividade ati  inner join aula a
-on ati.idatividade = a.idatividade
-and a.dataaula in ('2022-12-06');
-
-
-
-
-/*Alterando uma tabela para inserir uma coluna*/
-
-alter table aluno add sexo(char)not null;
+-- phpMyAdmin SQL Dump
+-- version 4.9.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Tempo de geração: 16-Jan-2023 às 18:07
+-- Versão do servidor: 10.4.8-MariaDB
+-- versão do PHP: 7.3.11
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Banco de dados: `academia`
+--
+CREATE DATABASE IF NOT EXISTS `academia` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `academia`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `aluno`
+--
+
+CREATE TABLE `aluno` (
+  `matricula` int(11) NOT NULL,
+  `nome` varchar(60) NOT NULL,
+  `telefone` varchar(15) NOT NULL,
+  `sexo` char(1) NOT NULL,
+  `cpf` char(14) NOT NULL,
+  `rg` varchar(15) NOT NULL,
+  `datanascimento` date NOT NULL,
+  `cep` char(9) NOT NULL,
+  `numerocasa` smallint(6) NOT NULL,
+  `complemento` varchar(30) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `senha` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `aluno`
+--
+
+INSERT INTO `aluno` (`matricula`, `nome`, `telefone`, `sexo`, `cpf`, `rg`, `datanascimento`, `cep`, `numerocasa`, `complemento`, `foto`, `email`, `senha`) VALUES
+(1, 'Maria das Graças da Silva', '(21)99886-1055', 'F', '123456893-10', '12555', '2001-08-01', '23085-610', 31, 'ap 102', 'vazio', 'maria@gmail.com', '$2y$10$im0jB8.c.gP0PaUEdCH3B.4IwD8OqIjfT7Bdocr5AmxfYEYbvIecu'),
+(2, 'Pedro', '(21)99999-1055', 'M', '123456789-10', '00012', '1997-10-20', '26551-090', 100, 'fundos', 'vazio', 'pdro@gmail.com', '123');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `atividade`
+--
+
+CREATE TABLE `atividade` (
+  `idatividade` int(11) NOT NULL,
+  `nomeatividade` varchar(60) NOT NULL,
+  `descricao` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `atividade`
+--
+
+INSERT INTO `atividade` (`idatividade`, `nomeatividade`, `descricao`) VALUES
+(1, 'jumpp', 'atividade realizada pulando em um trampolim'),
+(2, 'spinning', 'atividade realizada em uma bicicleta com subidas');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `aula`
+--
+
+CREATE TABLE `aula` (
+  `idaula` int(11) NOT NULL,
+  `dataaula` date NOT NULL,
+  `horario` varchar(30) NOT NULL,
+  `idprofessor` int(11) NOT NULL,
+  `idatividade` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `aula`
+--
+
+INSERT INTO `aula` (`idaula`, `dataaula`, `horario`, `idprofessor`, `idatividade`) VALUES
+(1, '2022-12-05', 'de 15:00 às 15:30h', 1, 1),
+(2, '2022-12-09', 'de 08:00 às 9:00h', 1, 2),
+(3, '2022-12-06', 'de 07:00 às 08:00h', 2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `aulaaluno`
+--
+
+CREATE TABLE `aulaaluno` (
+  `idaulaaluno` int(11) NOT NULL,
+  `matricula` int(11) NOT NULL,
+  `idaula` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `aulaaluno`
+--
+
+INSERT INTO `aulaaluno` (`idaulaaluno`, `matricula`, `idaula`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `endereco`
+--
+
+CREATE TABLE `endereco` (
+  `cep` char(9) NOT NULL,
+  `rua` varchar(60) NOT NULL,
+  `bairro` varchar(40) NOT NULL,
+  `cidade` varchar(40) NOT NULL,
+  `uf` char(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `endereco`
+--
+
+INSERT INTO `endereco` (`cep`, `rua`, `bairro`, `cidade`, `uf`) VALUES
+('23085-610', 'Rua Padre Pauwels', 'Campo Grande', 'Rio de Janeiro', 'RJ'),
+('26551-090', 'Travessa Elpidio', 'Cruzeiro do Sul', 'Mesquita', 'RJ');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `funcionario`
+--
+
+CREATE TABLE `funcionario` (
+  `cpffuncionario` char(14) NOT NULL,
+  `nome` varchar(60) NOT NULL,
+  `telefone` varchar(15) NOT NULL,
+  `sexo` char(1) NOT NULL,
+  `rg` varchar(15) NOT NULL,
+  `cep` char(9) NOT NULL,
+  `numerocasa` smallint(6) NOT NULL,
+  `complemento` varchar(30) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `senha` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `funcionario`
+--
+
+INSERT INTO `funcionario` (`cpffuncionario`, `nome`, `telefone`, `sexo`, `rg`, `cep`, `numerocasa`, `complemento`, `foto`, `email`, `senha`) VALUES
+('123', 'Mário Silva', '(21)9999-8888', 'M', '0001', '23085-610', 40, 'ap 202', 'vazio', '', ''),
+('456', 'Gabriel Silva', '(21)9999-7777', 'M', '0002', '26551-090', 100, 'casa', 'vazio', '', ''),
+('789', 'Mariana Souza', '(21)9999-5555', 'F', '1234', '23085-610', 1820, 'casa', 'vazio', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `habilitaprofessor`
+--
+
+CREATE TABLE `habilitaprofessor` (
+  `idhabilitacao` int(11) NOT NULL,
+  `idatividade` int(11) NOT NULL,
+  `idprofessor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `habilitaprofessor`
+--
+
+INSERT INTO `habilitaprofessor` (`idhabilitacao`, `idatividade`, `idprofessor`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `produto`
+--
+
+CREATE TABLE `produto` (
+  `codigoproduto` int(11) NOT NULL,
+  `nome` varchar(60) NOT NULL,
+  `cor` varchar(30) NOT NULL,
+  `valor` double NOT NULL,
+  `tamanho` char(2) NOT NULL,
+  `quantidade` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `produto`
+--
+
+INSERT INTO `produto` (`codigoproduto`, `nome`, `cor`, `valor`, `tamanho`, `quantidade`) VALUES
+(1, 'mochila Paloma', 'rosa', 150, 'un', 20),
+(2, 'mochila Raissa', 'azul', 120, 'un', 30);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `professor`
+--
+
+CREATE TABLE `professor` (
+  `idprofessor` int(11) NOT NULL,
+  `disponibilidade` varchar(40) NOT NULL,
+  `cpffuncionario` char(14) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `professor`
+--
+
+INSERT INTO `professor` (`idprofessor`, `disponibilidade`, `cpffuncionario`) VALUES
+(1, 'segunda e sexta dia todo', '123'),
+(2, 'terca,quarta e quinta dia todo', '456');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `venda`
+--
+
+CREATE TABLE `venda` (
+  `idvenda` int(11) NOT NULL,
+  `data` date NOT NULL,
+  `valor` double NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `codigoproduto` int(11) NOT NULL,
+  `cpffuncionario` char(14) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `venda`
+--
+
+INSERT INTO `venda` (`idvenda`, `data`, `valor`, `quantidade`, `codigoproduto`, `cpffuncionario`) VALUES
+(1, '2022-12-05', 300, 2, 1, '789'),
+(2, '2022-12-05', 120, 1, 2, '789');
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices para tabela `aluno`
+--
+ALTER TABLE `aluno`
+  ADD PRIMARY KEY (`matricula`),
+  ADD KEY `cep` (`cep`);
+
+--
+-- Índices para tabela `atividade`
+--
+ALTER TABLE `atividade`
+  ADD PRIMARY KEY (`idatividade`);
+
+--
+-- Índices para tabela `aula`
+--
+ALTER TABLE `aula`
+  ADD PRIMARY KEY (`idaula`),
+  ADD KEY `idprofessor` (`idprofessor`),
+  ADD KEY `idatividade` (`idatividade`);
+
+--
+-- Índices para tabela `aulaaluno`
+--
+ALTER TABLE `aulaaluno`
+  ADD PRIMARY KEY (`idaulaaluno`),
+  ADD KEY `matricula` (`matricula`),
+  ADD KEY `idaula` (`idaula`);
+
+--
+-- Índices para tabela `endereco`
+--
+ALTER TABLE `endereco`
+  ADD PRIMARY KEY (`cep`);
+
+--
+-- Índices para tabela `funcionario`
+--
+ALTER TABLE `funcionario`
+  ADD PRIMARY KEY (`cpffuncionario`),
+  ADD KEY `cep` (`cep`);
+
+--
+-- Índices para tabela `habilitaprofessor`
+--
+ALTER TABLE `habilitaprofessor`
+  ADD PRIMARY KEY (`idhabilitacao`),
+  ADD KEY `idatividade` (`idatividade`),
+  ADD KEY `idprofessor` (`idprofessor`);
+
+--
+-- Índices para tabela `produto`
+--
+ALTER TABLE `produto`
+  ADD PRIMARY KEY (`codigoproduto`);
+
+--
+-- Índices para tabela `professor`
+--
+ALTER TABLE `professor`
+  ADD PRIMARY KEY (`idprofessor`),
+  ADD KEY `cpffuncionario` (`cpffuncionario`);
+
+--
+-- Índices para tabela `venda`
+--
+ALTER TABLE `venda`
+  ADD PRIMARY KEY (`idvenda`),
+  ADD KEY `codigoproduto` (`codigoproduto`),
+  ADD KEY `cpffuncionario` (`cpffuncionario`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `aluno`
+--
+ALTER TABLE `aluno`
+  MODIFY `matricula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `atividade`
+--
+ALTER TABLE `atividade`
+  MODIFY `idatividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `aula`
+--
+ALTER TABLE `aula`
+  MODIFY `idaula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `aulaaluno`
+--
+ALTER TABLE `aulaaluno`
+  MODIFY `idaulaaluno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `habilitaprofessor`
+--
+ALTER TABLE `habilitaprofessor`
+  MODIFY `idhabilitacao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `produto`
+--
+ALTER TABLE `produto`
+  MODIFY `codigoproduto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `professor`
+--
+ALTER TABLE `professor`
+  MODIFY `idprofessor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `venda`
+--
+ALTER TABLE `venda`
+  MODIFY `idvenda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Restrições para despejos de tabelas
+--
+
+--
+-- Limitadores para a tabela `aluno`
+--
+ALTER TABLE `aluno`
+  ADD CONSTRAINT `aluno_ibfk_1` FOREIGN KEY (`cep`) REFERENCES `endereco` (`cep`);
+
+--
+-- Limitadores para a tabela `aula`
+--
+ALTER TABLE `aula`
+  ADD CONSTRAINT `aula_ibfk_1` FOREIGN KEY (`idprofessor`) REFERENCES `professor` (`idprofessor`),
+  ADD CONSTRAINT `aula_ibfk_2` FOREIGN KEY (`idatividade`) REFERENCES `atividade` (`idatividade`);
+
+--
+-- Limitadores para a tabela `aulaaluno`
+--
+ALTER TABLE `aulaaluno`
+  ADD CONSTRAINT `aulaaluno_ibfk_1` FOREIGN KEY (`matricula`) REFERENCES `aluno` (`matricula`),
+  ADD CONSTRAINT `aulaaluno_ibfk_2` FOREIGN KEY (`idaula`) REFERENCES `aula` (`idaula`);
+
+--
+-- Limitadores para a tabela `funcionario`
+--
+ALTER TABLE `funcionario`
+  ADD CONSTRAINT `funcionario_ibfk_1` FOREIGN KEY (`cep`) REFERENCES `endereco` (`cep`);
+
+--
+-- Limitadores para a tabela `habilitaprofessor`
+--
+ALTER TABLE `habilitaprofessor`
+  ADD CONSTRAINT `habilitaprofessor_ibfk_1` FOREIGN KEY (`idatividade`) REFERENCES `atividade` (`idatividade`),
+  ADD CONSTRAINT `habilitaprofessor_ibfk_2` FOREIGN KEY (`idprofessor`) REFERENCES `professor` (`idprofessor`);
+
+--
+-- Limitadores para a tabela `professor`
+--
+ALTER TABLE `professor`
+  ADD CONSTRAINT `professor_ibfk_1` FOREIGN KEY (`cpffuncionario`) REFERENCES `funcionario` (`cpffuncionario`);
+
+--
+-- Limitadores para a tabela `venda`
+--
+ALTER TABLE `venda`
+  ADD CONSTRAINT `venda_ibfk_1` FOREIGN KEY (`codigoproduto`) REFERENCES `produto` (`codigoproduto`),
+  ADD CONSTRAINT `venda_ibfk_2` FOREIGN KEY (`cpffuncionario`) REFERENCES `funcionario` (`cpffuncionario`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
