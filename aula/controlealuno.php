@@ -1,14 +1,42 @@
 <?php
     include_once 'conexao.php';
 
-try{
+    try{
 
     $dadoscad = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
     var_dump($dadoscad);
 
     if (!empty($dadoscad['btncad'])) {
+
+        $vazio = false;
+
+        $dadoscad = array_map('trim', $dadoscad);
+        if (in_array("", $dadoscad)) {
+            $vazio = true;
+           
+            echo "<script>
+        alert('Preencher todos os campos!!!');
+        parent.location = 'frmaluno.php';
+        </script>";
+
+        } else if(!filter_var($dadoscad['email'], FILTER_VALIDATE_EMAIL)) {
+            $vazio = true;
+
+            echo "<script>
+            alert('Informe um e-mail válido!!');
+            parent.location = 'frmaluno.php';
+            </script>";
+            
+            
+        }
     
+
+if (!$vazio) {
+
+
+    $senha = password_hash($dadoscad['senha'], PASSWORD_DEFAULT);
+
     $sql = "insert into aluno(nome,sexo,datanascimento,
     telefone,cpf,rg,cep,numerocasa,complemento,foto,email,senha)
     values(:nome,:sexo,:datanascimento,:telefone,:cpf,:rg,:cep,
@@ -26,15 +54,26 @@ try{
     $salvar->bindParam(':complemento', $dadoscad['complemento'], PDO::PARAM_STR);
     $salvar->bindParam(':foto', $dadoscad['foto'], PDO::PARAM_STR);
     $salvar->bindParam(':email', $dadoscad['email'], PDO::PARAM_STR);
-    $salvar->bindParam(':senha', $dadoscad['senha'], PDO::PARAM_STR);
+    $salvar->bindParam(':senha', $senha, PDO::PARAM_STR);
     $salvar->execute();
 
     if ($salvar->rowCount()) {
-        echo "Usuário cadastrado com sucesso!";
+        
+        echo "<script>
+        alert('Usuário cadastrado com sucesso!!');
+        parent.location = 'frmaluno.php';
+        </script>";
+
         unset($dadoscad);
     } else {
-        echo "Usuário não cadastrado com sucesso!</p>";
+        echo "<script>
+        alert('Usuário não cadastrado!');
+        parent.location = 'frmaluno.php';
+        </script>";
+        
     }
+
+}
 
 }
 
