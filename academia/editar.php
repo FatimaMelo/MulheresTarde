@@ -31,13 +31,20 @@
 ?>
 
 
-<form method="POST" action="controlealuno.php">
+<form method="POST" action="controlealuno.php" enctype="multipart/form-data">
     <div class="container">
         <div class="row">
                 <div class="col-md-12 text-center">
                     <h3>Controle de Aluno</h3>
                 </div>
         </div>
+
+        <div class="row">
+                <div class="col-md-12 text-left">
+                    <img src="<?php echo $foto; ?>" style=width:150px;height:150px;>
+                </div>
+        </div>
+
 
         <div class="row">
 
@@ -184,9 +191,8 @@
             <div class="col-md-5  ">
               <div class="form-group">
                  <label for="foto">Foto</label><p>
-                 <input type="text" class="form-control" name="foto"
-                 value="<?php echo $foto;?>"                    
-                    >
+                 <input type="file" class="form-control" name="foto">                   
+                
                 </div>
             </div>
 
