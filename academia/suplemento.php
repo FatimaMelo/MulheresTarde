@@ -1,6 +1,7 @@
 <?php
    
     require_once 'head.php';
+    require 'menu.php';
     include_once 'conexao.php';
 
     $pagatual = filter_input(INPUT_GET, "page", FILTER_SANITIZE_NUMBER_INT);
@@ -41,7 +42,10 @@
                     <div class="card-body text-center">
                         <h3 class="card-text"><?php echo $nome; ?></h3>
                         <h4>Preço R$ <?php echo $valor; ?>,00</h4>
-                        <!-- Botão para acionar modal -->
+                       <h5>
+                        <label>Quant</label>
+                        <input type="number" name="quantcompra" value="1" style=width:45px;>
+                        </h5>
                             <button type="button" class="btn btn-primary">
                             Comprar
                             </button>
@@ -95,3 +99,9 @@
 
 
 ?>
+
+<?php
+        require_once 'footer.php';
+
+    ?>
+ 
