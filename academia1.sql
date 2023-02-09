@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/02/2023 às 21:06
+-- Tempo de geração: 09/02/2023 às 23:49
 -- Versão do servidor: 10.4.24-MariaDB
 -- Versão do PHP: 8.1.6
 
@@ -138,9 +138,10 @@ CREATE TABLE `carrinho` (
 --
 
 INSERT INTO `carrinho` (`codigoproduto`, `nome`, `valor`, `quantcompra`, `foto`) VALUES
-(6, 'Vitamina D', 15, 3, 'produtos/63dbe3b8c5142.jpg'),
-(5, 'Vitamina E', 25, 3, 'produtos/63dbe37e4d29f.jpg'),
-(6, 'Vitamina D', 15, 3, 'produtos/63dbe3b8c5142.jpg');
+(9, 'Whein Protein 1', 100, 3, 'produtos/63dbe5331d643.jpg'),
+(6, 'Vitamina D', 15, 1, 'produtos/63dbe3b8c5142.jpg'),
+(7, 'Vitamina e Minerais', 60, 1, 'produtos/63dc5048880df.jpg'),
+(8, 'Vitamina Força', 120, 1, 'produtos/63dbe42c614a2.jpg');
 
 -- --------------------------------------------------------
 
@@ -223,8 +224,33 @@ CREATE TABLE `item` (
   `iditem` int(11) NOT NULL,
   `idvenda` int(11) NOT NULL,
   `codigoproduto` int(11) NOT NULL,
-  `quantidade` int(11) NOT NULL
+  `quantidade` int(11) NOT NULL,
+  `valor` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Despejando dados para a tabela `item`
+--
+
+INSERT INTO `item` (`iditem`, `idvenda`, `codigoproduto`, `quantidade`, `valor`) VALUES
+(1, 8, 6, 3, 15),
+(2, 8, 7, 3, 60),
+(3, 8, 8, 3, 120),
+(4, 9, 6, 3, 15),
+(5, 9, 7, 3, 60),
+(6, 9, 8, 3, 120),
+(7, 10, 7, 1, 60),
+(8, 10, 6, 1, 15),
+(9, 10, 5, 1, 25),
+(10, 11, 7, 1, 60),
+(11, 12, 6, 1, 15),
+(12, 12, 7, 1, 60),
+(13, 13, 5, 1, 25),
+(14, 13, 6, 1, 15),
+(15, 14, 6, 1, 15),
+(16, 15, 6, 1, 15),
+(17, 16, 6, 1, 15),
+(18, 17, 6, 1, 15);
 
 -- --------------------------------------------------------
 
@@ -252,8 +278,8 @@ INSERT INTO `produto` (`codigoproduto`, `nome`, `cor`, `valor`, `tamanho`, `quan
 (2, 'mochila Raissa', 'azul', 120, 'un', 30, 2, 'produtos/63daa6af278c1.jpg'),
 (3, 'mochila amanda', 'preta', 50.85, 'M', 30, 1, 'produtos/63d964567a504.jpg'),
 (4, 'mochila agatha', 'azul', 100.6, 'G', 10, 1, 'produtos/63d9649fb4542.jpg'),
-(5, 'Vitamina E', 'un', 25, 'un', 30, 3, 'produtos/63dbe37e4d29f.jpg'),
-(6, 'Vitamina D', 'un', 15, 'un', 50, 3, 'produtos/63dbe3b8c5142.jpg'),
+(5, 'Vitamina E', 'un', 25, 'un', 27, 3, 'produtos/63dbe37e4d29f.jpg'),
+(6, 'Vitamina D', 'un', 15, 'un', 49, 3, 'produtos/63dbe3b8c5142.jpg'),
 (7, 'Vitamina e Minerais', 'un', 60, 'un', 10, 3, 'produtos/63dc5048880df.jpg'),
 (8, 'Vitamina Força', 'un', 120, 'un', 50, 3, 'produtos/63dbe42c614a2.jpg'),
 (9, 'Whein Protein 1', 'un', 100, 'un', 20, 3, 'produtos/63dbe5331d643.jpg'),
@@ -298,7 +324,20 @@ CREATE TABLE `venda` (
 
 INSERT INTO `venda` (`idvenda`, `data`, `valor`, `matricula`) VALUES
 (3, '2023-02-07', 45, 1),
-(4, '2023-02-07', 165, 1);
+(4, '2023-02-07', 165, 1),
+(5, '2023-02-08', 585, 1),
+(6, '2023-02-08', 585, 1),
+(7, '2023-02-08', 585, 1),
+(8, '2023-02-08', 585, 1),
+(9, '2023-02-08', 585, 1),
+(10, '2023-02-08', 100, 1),
+(11, '2023-02-08', 60, 1),
+(12, '2023-02-08', 75, 1),
+(13, '2023-02-08', 40, 1),
+(14, '2023-02-08', 15, 1),
+(15, '2023-02-08', 15, 1),
+(16, '2023-02-08', 15, 1),
+(17, '2023-02-08', 15, 1);
 
 --
 -- Índices para tabelas despejadas
@@ -427,7 +466,7 @@ ALTER TABLE `habilitaprofessor`
 -- AUTO_INCREMENT de tabela `item`
 --
 ALTER TABLE `item`
-  MODIFY `iditem` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iditem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de tabela `produto`
@@ -445,7 +484,7 @@ ALTER TABLE `professor`
 -- AUTO_INCREMENT de tabela `venda`
 --
 ALTER TABLE `venda`
-  MODIFY `idvenda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idvenda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Restrições para tabelas despejadas
